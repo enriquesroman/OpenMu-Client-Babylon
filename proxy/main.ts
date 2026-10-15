@@ -317,6 +317,7 @@ const proxyServer = Bun.serve<WebSocketData>({
   hostname: HOSTNAME,
   fetch(req, server) {
     const url = new URL(req.url);
+    const searchParams = url.searchParams;
     if (req.method === "OPTIONS") {
       return new Response(null, {
         headers: {
