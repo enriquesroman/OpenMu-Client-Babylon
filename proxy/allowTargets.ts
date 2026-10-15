@@ -121,9 +121,14 @@ export function targetAllowed(
   if (!rules.length) return true;
 
   // Always allow standard game ports across Railway's private network & proxies
-  if (port === 44405 || port === 45901) {
+  if (port === 44405 || port === 45901 || port === 37212 || port === 15013) {
     const h = host.toLowerCase();
-    if (h.endsWith(".railway.internal") || h.startsWith("10.") || h.includes("proxy.rlwy.net")) {
+    if (
+      h.endsWith(".railway.internal") ||
+      h.startsWith("10.") ||
+      h.includes("proxy.rlwy.net") ||
+      h === "66.33.22.219"
+    ) {
       return true;
     }
   }

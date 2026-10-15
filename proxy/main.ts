@@ -368,8 +368,17 @@ const proxyServer = Bun.serve<WebSocketData>({
       return new Response("Upgrade failed :(", { status: 500 });
     }
 
-    const targetHost = searchParams.get("host")?.trim().toLowerCase() ?? "";
-    const targetPort = parseInt(searchParams.get("port") ?? "0");
+    let targetHost = searchParams.get("host")?.trim().toLowerCase() ?? "";
+    let targetPort = parseInt(searchParams.get("port") ?? "0");
+
+    // Remap public proxy ports to internal Railway service ports when connecting locally
+    if (targetPort === 37212 || (targetPort === 45901 && targetHost === "66.33.22.219")) {
+      targetHost = "openmu.railway.internal";
+      targetPort = 45901;
+    } else if (targetPort === 15013 || (targetPort === 44405 && targetHost === "66.33.22.219")) {
+      targetHost = "openmu.railway.internal";
+      targetPort = 44405;
+    }
 
     // Refuse here rather than in `open`: a bad target used to upgrade and then
     // fail inside Bun.connect, which the client sees as a socket that closed
