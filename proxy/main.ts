@@ -17,7 +17,7 @@ import { isPingFrame } from "../src/controllers/net/protocols/pingProtocol";
 import { SERVER_MANIFEST_PATH, serverManifestResponse } from "./serverManifest";
 
 const PORT = process.env.PROXY_PORT || "3000";
-const HOSTNAME = process.env.HOSTNAME || '0.0.0.0';
+const HOSTNAME = "0.0.0.0";
 
 /**
  * Weather broadcast (see weather.ts).
@@ -312,12 +312,35 @@ if (PING_ENABLED && tracker) {
 
 startPresenceServer();
 
-Bun.serve<WebSocketData>({
+const proxyServer = Bun.serve<WebSocketData>({
   port: PORT,
   hostname: HOSTNAME,
   fetch(req, server) {
     const url = new URL(req.url);
-    const searchParams = url.searchParams;
+    if (req.method === "OPTIONS") {
+      return new Response(null, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+          "Access-Control-Allow-Headers": "*",
+        },
+      });
+    }
+
+    if (url.pathname === "/server.json") {
+      return new Response(JSON.stringify({ version: 1, settings: {} }), {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+    }
+
+    if (url.pathname === "/" && req.method === "GET" && !searchParams.get("host")) {
+      return new Response("OK", {
+        headers: { "Access-Control-Allow-Origin": "*" },
+      });
+    }
 
     if (url.pathname === SERVER_MANIFEST_PATH && req.method === "GET") return serverManifestResponse();
 
@@ -554,4 +577,4 @@ Bun.serve<WebSocketData>({
   },
 });
 
-console.log(`Listening...`);
+console.log(`WebSocket Proxy listening on ${proxyServer.hostname}:${proxyServer.port}`);
