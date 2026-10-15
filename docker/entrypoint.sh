@@ -4,7 +4,7 @@ set -e
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "▶ Starting WS↔TCP proxy on port 3000..."
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-bun run proxy & PROXY_PID=$!
+PROXY_PORT=3000 bun run proxy & PROXY_PID=$!
 
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "▶ Starting production preview server on port 4173..."

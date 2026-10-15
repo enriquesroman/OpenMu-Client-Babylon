@@ -16,7 +16,7 @@ import { PingHub, type PingPeer } from "./ping/hub";
 import { isPingFrame } from "../src/controllers/net/protocols/pingProtocol";
 import { SERVER_MANIFEST_PATH, serverManifestResponse } from "./serverManifest";
 
-const PORT = process.env.PORT || "3000";
+const PORT = process.env.PROXY_PORT || "3000";
 const HOSTNAME = process.env.HOSTNAME || '0.0.0.0';
 
 /**
