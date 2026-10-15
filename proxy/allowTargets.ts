@@ -120,6 +120,14 @@ export function targetAllowed(
   if (targetReserved(reserved, host, port)) return false;
   if (!rules.length) return true;
 
+  // Always allow standard game ports across Railway's private network & proxies
+  if (port === 44405 || port === 45901) {
+    const h = host.toLowerCase();
+    if (h.endsWith(".railway.internal") || h.startsWith("10.") || h.includes("proxy.rlwy.net")) {
+      return true;
+    }
+  }
+
   const internal = isInternalHost(host);
 
   return rules.some(rule => {
