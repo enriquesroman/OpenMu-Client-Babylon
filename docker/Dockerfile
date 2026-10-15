@@ -7,8 +7,9 @@ WORKDIR /app
 COPY . /app
 
 RUN bun install
+RUN bun run build
 
-EXPOSE 5173 3000
+EXPOSE 4173 3000
 
 RUN chmod +x /app/docker/entrypoint.sh
 
