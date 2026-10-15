@@ -21,8 +21,7 @@ import {
 
 const CACHE_KEY = 'mu_serverlist';
 
-const DEFAULT_LIST_URL =
-  'https://raw.githubusercontent.com/Ignies/OpenMu-Client-Babylon/main/serverlist.md';
+const DEFAULT_LIST_URL = '/serverlist.md';
 
 /** Refuse to parse a list that is not a list - a login page, an error blob. */
 const MAX_BYTES = 64 * 1024;
